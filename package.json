@@ -7,7 +7,7 @@
     "clean": "rimraf build",
     "build": "tsc",
     "dev": "ts-node-dev --respawn src/index.ts",
-    "start": "node ./build/index.js",
+    "start": "ts-node-dev --respawn src/index.ts",
     "test": " src/test"
   },
   "keywords": [],

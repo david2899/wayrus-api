@@ -1,4 +1,4 @@
-import { Server } from "./server";
+import { Server } from "./app";
 import './config/mongoose'
 
 const server = new Server();
