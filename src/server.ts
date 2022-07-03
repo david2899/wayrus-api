@@ -5,9 +5,7 @@ import compression from 'compression';
 import cors from 'cors';
 
 // import routes
-import indexRoutes from './routes/indexRoutes';
 import PostRouter from './routes/PostRoutes';
-import UserRoutes from './routes/UserRoutes';
 
 // Server Class
 class Server {
@@ -33,15 +31,12 @@ class Server {
 
     public routes(): void {
         const router: express.Router = express.Router();
-
-        this.app.use('/', indexRoutes);
-        this.app.use('/api/posts', PostRouter);
-        this.app.use('/api/users', UserRoutes);
+        this.app.use('/api/', PostRouter);
     }
 
     public start(): void {
         this.app.listen(this.app.get('port'), () => {
-            console.log('Server is listenning on port', this.app.get('port'));
+            console.log('Server is listening on port', this.app.get('port'));
         });
     }
 }

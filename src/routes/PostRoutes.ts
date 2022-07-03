@@ -1,51 +1,27 @@
-import { Router, Request, Response, NextFunction } from 'express';
-
-import Post from '../models/Post';
+import { Router, Request, Response } from "express";
+import { sendEmail } from "../services/email.service";
 
 class PostRouter {
-    router: Router;
+  router: Router;
 
-    constructor() {
-        this.router = Router();
-        this.routes();
+  constructor() {
+    this.router = Router();
+    this.routes();
+  }
+
+  public async postEmail(req: Request, res: Response): Promise<void> {
+    const resp = await sendEmail(req.body.message);
+    if (resp) {
+        res.json("email sent, success");
+    } else {
+        res.json("email not sent, error");
     }
+  
+  }
 
-    public async getPosts(req: Request, res: Response): Promise<void> {
-        const posts = await Post.find();
-        res.json({ posts });
-    }
-
-    public async getPost(req: Request, res: Response): Promise<void> {
-        const post = await Post.find({ url: { $regex: req.params.url } });
-        res.json(post);
-    }
-
-    public async createPost(req: Request, res: Response): Promise<void>{
-        const { title, url, content, image } = req.body;
-        const newPost= new Post({title, url, content, image});
-        await newPost.save();
-        res.json({status: res.status, data: newPost});
-
-    }
-
-    public async updatePost(req: Request, res: Response): Promise<void>{
-        const { url } = req.params;
-        const post = await Post.findOneAndUpdate({url}, req.body);
-        res.json({status: res.status, data: post});
-    }
-
-    public async deletePost(req: Request, res: Response): Promise<void> {
-        await Post.findOneAndRemove({ url: req.params.url });
-        res.json({ response: 'Post deleted Successfully' });
-    }
-
-    routes() {
-        this.router.get('/', this.getPosts);
-        this.router.get('/:url', this.getPost);
-        this.router.post('/', this.createPost);
-        this.router.put('/:url', this.updatePost);
-        this.router.delete('/:url', this.deletePost);
-    }
+  routes() {
+    this.router.post("/send/email", this.postEmail);
+  }
 }
 
 const postRoutes = new PostRouter();
