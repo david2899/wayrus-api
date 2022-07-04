@@ -10,13 +10,18 @@ class PostRouter {
   }
 
   public async postEmail(req: Request, res: Response): Promise<void> {
-    const resp = await sendEmail(req.body.message);
-    if (resp) {
-        res.json("email sent, success");
-    } else {
-        res.json("email not sent, error");
+    try {
+      console.log('llego', req.body)
+      const resp = await sendEmail(req.body.subject, req.body.message)
+      if (resp) {
+          res.json({message: "email sent, success"});
+      } else {
+          res.json("email not sent, error");
+      }
+    
+    } catch (error) {
+      console.log(error);
     }
-  
   }
 
   routes() {
